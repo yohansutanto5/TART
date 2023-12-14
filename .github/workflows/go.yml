@@ -3,7 +3,7 @@ name: Continuous Integration
 on:
   push:
     branches:
-      - master
+      - main
 
 jobs:
   build:
@@ -56,5 +56,5 @@ jobs:
         file: ./cmd/Dockerfile  # Adjust the path to your Dockerfile
         push: true
         tags: |
-          yohansutanto5/backend:latest
-          yohansutanto5/backend:${{ github.sha }}
+          yohansutanto5/tart:latest
+          yohansutanto5/tart:${{ github.sha }}
