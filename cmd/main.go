@@ -28,7 +28,9 @@ func main() {
 	// db.Migration(&configuration, false)
 	if true {
 		log.System("SQL Migration is Starting")
-		err := database.Db.AutoMigrate(model.UserProfile{}, model.User{})
+		err := database.Db.AutoMigrate(model.UserProfile{}, model.User{}, model.Ticket{},
+			model.UAT{}, model.Regression{}, model.Performance{}, model.UnitTest{}, model.Chaos{},
+			model.Sonar{})
 		if err != nil {
 			log.Fatal(err.Error())
 		}

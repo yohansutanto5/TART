@@ -50,8 +50,11 @@ func TestStructConverterToMap(t *testing.T) {
 func TestError(t *testing.T) {
 	err := newerr.Error{}
 	e := errors.New("Error 1062 (23000): Duplicate entry 'abc567' for key 'users.username'")
+	// e := errors.New("Error 1146 (42S02): Table 'devsync.uats' doesn't exist")
+
 	err.ParseMysqlError(e)
 	assert.Equal(t, err.Status, 409)
+	// assert.Equal(t,"APP-DB-1146",err.Code)
 }
 
 func TestExec(t *testing.T) {

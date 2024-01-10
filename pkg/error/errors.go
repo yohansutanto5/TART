@@ -86,7 +86,7 @@ func (e *Error) ParseMysqlError(err error) {
 		return
 	}
 
-	re := regexp.MustCompile(`Error (\d+) \((\d+)\): (.+)`)
+	re := regexp.MustCompile(`Error (.+) \((.+)\): (.+)`)
 	match := re.FindStringSubmatch(err.Error())
 	if len(match) == 4 {
 		e.Message = match[3]

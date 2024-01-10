@@ -14,8 +14,9 @@ func setupRoutes() *gin.Engine {
 
 	// Initiate all Handler and dependency
 	userHandler := handler.NewUserHandler(database)
-	UserProfilehandler := handler.NewUserProfileHandler(database)
+	userProfilehandler := handler.NewUserProfileHandler(database)
 	systemHander := handler.NewSystemHandler(database)
+	ticketHandler := handler.NewTicketHandler(database)
 
 	// Define The route Path
 	// ---- System API ---
@@ -26,8 +27,12 @@ func setupRoutes() *gin.Engine {
 	r.GET("/user", userHandler.GetList)
 
 	// ---- UserProfile API ---
-	r.POST("/userprofile", UserProfilehandler.Insert)
-	r.GET("/userprofile", UserProfilehandler.GetList)
+	r.POST("/userprofile", userProfilehandler.Insert)
+	r.GET("/userprofile", userProfilehandler.GetList)
+
+	// ---- Ticket API ---
+	r.POST("/ticket", ticketHandler.Insert)
+	r.GET("/ticket", ticketHandler.GetList)
 
 	return r
 }
