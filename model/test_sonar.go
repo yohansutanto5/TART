@@ -1,12 +1,7 @@
 package model
 
-import "time"
-
 type Sonar struct {
-	ID       int       `gorm:"primaryKey;autoIncrement"`
-	Artefact string    `gorm:"type:VARCHAR(20);not null;"`
-	Created  time.Time `gorm:"type:date;default:(CURRENT_DATE)"`
-	Updated  time.Time `gorm:"type:date;default:(CURRENT_DATE)"`
+	Test
 }
 
 // DTO input``

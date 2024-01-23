@@ -4,8 +4,6 @@ type Chaos struct {
 	Test
 }
 
-// DTO input``
-
 type AddChaosIn struct {
 	Artefact string `json:"artefact" binding:"required"`
 }

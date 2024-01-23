@@ -10,14 +10,14 @@ type Ticket struct {
 	Created time.Time `gorm:"type:date;default:(CURRENT_DATE)"`
 	Updated time.Time `gorm:"type:date;default:(CURRENT_DATE)"`
 	// List of testings
-	UATs         []UAT         `gorm:"foreignKey:TicketID"`
-	Regressions  []Regression  `gorm:"foreignKey:TicketID"`
-	Performances []Performance `gorm:"foreignKey:TicketID"`
-	UnitTest     UnitTest      `gorm:"foreignKey:UniTestID"`
+	UATs         []UAT         `gorm:"foreignKey:TicketID;OnDelete:CASCADE;"`
+	Regressions  []Regression  `gorm:"foreignKey:TicketID;OnDelete:CASCADE;"`
+	Performances []Performance `gorm:"foreignKey:TicketID;OnDelete:CASCADE;"`
+	UnitTest     UnitTest      `gorm:"foreignKey:UniTestID;OnDelete:CASCADE;"`
 	UniTestID    int
-	Sonar        Sonar `gorm:"foreignKey:SonarID"`
+	Sonar        Sonar `gorm:"foreignKey:SonarID;OnDelete:CASCADE;"`
 	SonarID      int
-	Chaos        Chaos `gorm:"foreignKey:ChaosID"`
+	Chaos        Chaos `gorm:"foreignKey:ChaosID;OnDelete:CASCADE;"`
 	ChaosID      int
 	// PAT Test
 }
@@ -27,9 +27,9 @@ type AddTicketIn struct {
 	UATs         []AddUATIn         `json:"uat"`
 	Regressions  []AddRegressionIn  `json:"regression"`
 	Performances []AddPerformanceIn `json:"performance"`
-	Sonar        Sonar              `json:"sonar"`
-	Chaos        Chaos              `json:"chaos"`
-	UnitTest     UnitTest           `json:"unittest"`
+	Sonar        AddSonarIn         `json:"sonar"`
+	Chaos        AddChaosIn         `json:"chaos"`
+	UnitTest     AddUnitTestIn      `json:"unittest"`
 }
 
 type GetTicketOut struct {
@@ -46,10 +46,10 @@ type GetTicketOut struct {
 
 func (m *Ticket) PopulateFromDTOInput(input AddTicketIn) {
 	m.Appcode = input.Appcode
-	m.Sonar = Sonar{Artefact: input.Sonar.Artefact}
-	m.UnitTest = UnitTest{Artefact: input.UnitTest.Artefact}
-	m.Chaos = Chaos{Artefact: input.Chaos.Artefact}
-
+	m.Sonar.PopulateFromDTOInput(input.Sonar)
+	m.UnitTest.PopulateFromDTOInput(input.UnitTest)
+	m.Chaos.PopulateFromDTOInput(input.Chaos)
+	
 	for _, i := range input.UATs {
 		m.UATs = append(m.UATs, UAT{Artefact: i.Artefact})
 	}
@@ -59,15 +59,15 @@ func (m *Ticket) PopulateFromDTOInput(input AddTicketIn) {
 	for _, i := range input.Performances {
 		m.Performances = append(m.Performances, Performance{Artefact: i.Artefact})
 	}
-	m.Status = "NEW"
+	m.Status = "DRAFT"
 }
 func (m *Ticket) ConstructGetTicketOut() (res GetTicketOut) {
 	res.Appcode = m.Appcode
 	res.Status = m.Status
 	res.CICD = m.CICD
-	res.Sonar = Sonar{Artefact: m.Sonar.Artefact}
+	res.Sonar = Sonar{Test: Test{Artefact: m.Chaos.Artefact}}
 	res.UnitTest = UnitTest{Artefact: m.UnitTest.Artefact}
-	res.Chaos = Chaos{Artefact: m.Chaos.Artefact}
+	res.Chaos = Chaos{Test: Test{Artefact: m.Chaos.Artefact}}
 
 	for _, i := range m.Regressions {
 		res.Regressions = append(res.Regressions, ListRegressionOut{Artefact: i.Artefact})

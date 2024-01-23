@@ -17,6 +17,7 @@ func setupRoutes() *gin.Engine {
 	userProfilehandler := handler.NewUserProfileHandler(database)
 	systemHander := handler.NewSystemHandler(database)
 	ticketHandler := handler.NewTicketHandler(database)
+	changeNaturehandler := handler.NewChangeNatureHandler(database)
 
 	// Define The route Path
 	// ---- System API ---
@@ -33,6 +34,10 @@ func setupRoutes() *gin.Engine {
 	// ---- Ticket API ---
 	r.POST("/ticket", ticketHandler.Insert)
 	r.GET("/ticket", ticketHandler.GetList)
+
+	// ---- UserProfile API ---
+	r.POST("/changenature", changeNaturehandler.Insert)
+	r.GET("/changenature", changeNaturehandler.GetList)
 
 	return r
 }
