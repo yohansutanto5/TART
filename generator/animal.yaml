@@ -1,0 +1,17 @@
+model: Pet
+fields:
+  - name: Stupid
+    type: string
+    binding: required
+  - name: Arm
+    type: string
+    binding: none
+  - name: Isfurry
+    type: bool
+    binding: none
+router:
+  - method: get
+    path: /hello
+  - method: post
+    path: get
+
